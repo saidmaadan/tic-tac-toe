@@ -1,5 +1,5 @@
 
-// Using NaN instead of null is a clever hack. See checkForWinner for details.
+// // Using NaN instead of null is a clever hack. See checkForWinner for details.
 var spaces = [
   NaN, NaN, NaN,
   NaN, NaN, NaN,
@@ -9,6 +9,7 @@ var spaces = [
 var player1 = 'Veggies';
 var player2 = 'Junkfood';
 var currentPlayer = null;
+var gameWon = false
 
 var setNextTurn = function () {
   if (currentPlayer === player1) {
@@ -66,18 +67,26 @@ var checkForWinner = function () {
 
 $(document).on('click', '#board .space', function (event) {
   event.preventDefault
+  if (gameWon){
+    alert("Game Over");
+    return;
+  }
+
   //check if the current space has any classes other than "space"
   // check if current space has more than 1 class
   var spaceNum = $(event.currentTarget).index();
 
   if ($('#board .space')[spaceNum].classList.length > 1) {
-    alert("Space has been taken, pick again.");
+    alert("This space has already been taken.");
   } else {
 
     console.log('You clicked on space #' + spaceNum);
 
     // Marks the space with the current player's name
     // TODO: Don't mark it unless the space is blank
+    // if (spaces[spaceNum] === player1 || spaces[spaceNum] === player2) {
+    //   alert("The space has been taken");
+    // } else {
     spaces[spaceNum] = currentPlayer;
     // Adds a class to elem so css can take care of the visuals
     $('#board .space:eq(' + spaceNum + ')').addClass(currentPlayer);
@@ -98,10 +107,11 @@ $(document).on('game-win', function (e, winner) {
   NaN, NaN, NaN,
   NaN, NaN, NaN
   ];
-  setNextTurn();
+  gameWon = true
 
 });
 
 // Start the game
 setNextTurn();
+
 
